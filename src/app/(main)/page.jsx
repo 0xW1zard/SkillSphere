@@ -1,4 +1,4 @@
-import { courses, instructors, trendingTopics } from "@/lib/data";
+import { courses, coursesdata, instructors, trendingTopics } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import { IoIosTrendingUp } from "react-icons/io";
@@ -11,7 +11,7 @@ import { FiBookOpen } from "react-icons/fi";
 
 export default async function Home() {
 
-  const courseData = await courses()
+  const courseData = await coursesdata();
   const popularCourses = courseData.slice(0, 3);
   const trending = trendingTopics;
   const mentors = instructors;
