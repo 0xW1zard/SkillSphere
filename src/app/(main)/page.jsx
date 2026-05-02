@@ -225,7 +225,7 @@ export default async function Home() {
                 <div className="relative w-36 h-36 mb-6">
                   <div className="absolute inset-0 rounded-full border-2 group-hover:scale-105 transition-transform duration-300"></div>
                   <div className="absolute inset-1.5 rounded-full overflow-hidden bg-slate-200">
-                    <Image src={instructor.image} alt={instructor.name} fill
+                    <Image src={instructor.image} alt={instructor.name} width={200} height={200} 
                       className="object-cover"
                     />
                   </div>

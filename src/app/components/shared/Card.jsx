@@ -6,7 +6,7 @@ const Card = ({ course }) => {
     return (
         <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col">
             <div className="relative h-52 w-full bg-slate-200">
-                <Image src={course.image} alt={course.title} fill className="object-cover" />
+                <Image src={course.image} alt={course.title} fill sizes="true" className="object-cover" />
                 <span className="absolute top-4 left-4 bg-[#76E4B6] text-slate-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                     {course.category}
                 </span>

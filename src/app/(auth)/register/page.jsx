@@ -1,13 +1,43 @@
 'use client'
-import React from 'react';
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { GrGoogle } from 'react-icons/gr';
+import { toast } from 'react-toastify';
 
 const RegisterPage = () => {
 
+    const [isShowPassword, setIsShowPassword] = useState(false);
+    const router = useRouter();
+
     const { register, handleSubmit, watch, formState: { errors } } = useForm()
 
-    const onSubmit = data => console.log(data);
+    const onSubmit = async (data) => {
+        const { name, email, password, photo } = data
+        console.log("Form Data:", { name, email, password, photo })
+
+        const { data: res, error } = await authClient.signUp.email({
+            name: name, // required
+            email: email, // required
+            password: password, // required
+            image: photo,
+            callbackURL: "/",
+        });
+
+        console.log("Sign Up Response:", { res, error })
+
+        if (error) {
+            toast.error('Sign up failed. Please check your credentials and try again.' + error.message);
+            return;
+        }
+
+        if (res) {
+            toast.success('Sign up successful!');
+            setTimeout(() => router.push("/"), 1000);
+        }
+    }
 
     return (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
@@ -34,10 +64,10 @@ const RegisterPage = () => {
                     <fieldset className="fieldset w-full ">
                         <legend className="fieldset-legend text-sm text-gray-700">Enter your image URL</legend>
                         <input type="text" className="input w-full" placeholder="https://example.com/image.jpg" {...register("photo", {
-                            // pattern: {
-                            //     value: /^https?:\/\/.+/i,
-                            //     message: "Please enter a valid URL starting with http:// or https://"
-                            // }
+                            pattern: {
+                                value: /^https?:\/\/.+/i,
+                                message: "Please enter a valid URL starting with http:// or https://"
+                            }
                         })} />
                         {
                             errors.photo && (
@@ -60,9 +90,12 @@ const RegisterPage = () => {
                         }
                     </fieldset>
 
-                    <fieldset className="fieldset w-full ">
+                    <fieldset className="fieldset w-full relative">
                         <legend className="fieldset-legend text-sm text-gray-700">Password</legend>
-                        <input type="password" className="input w-full" placeholder="••••••••" {...register("password", { required: "Password is required" })} />
+                        <input type={isShowPassword ? "text" : "password"} className="input w-full" placeholder="••••••••" {...register("password", { required: "Password is required" })} />
+                        <span onClick={() => setIsShowPassword(!isShowPassword)} className="absolute right-3 top-[50%] translate-y-[-50%] cursor-pointer text-sm text-gray-500" >{
+                            isShowPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>
+                        }</span>
                         {
                             errors.password && (
                                 <p className='text-red-500 text-xs mt-1'>
