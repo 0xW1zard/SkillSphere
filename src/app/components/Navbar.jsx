@@ -9,7 +9,7 @@ const Navbar = () => {
 
     const link = <>
         <li><NavLink href="/">Home</NavLink></li>
-        <li><NavLink href="/courses">Courses</NavLink></li> 
+        <li><NavLink href="/courses">Courses</NavLink></li>
         <li><NavLink href="/profile">My Profile</NavLink></li>
     </>
 
@@ -28,7 +28,7 @@ const Navbar = () => {
                             {link}
                         </ul>
                     </div>
-                    <div className="hidden lg:block w-10"></div>
+                    <div className="w-fit text-xl font-bold">Skill<span className='text-green-600'>Sphere</span></div>
                 </div>
 
                 <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2">
@@ -41,7 +41,7 @@ const Navbar = () => {
                     <div className="flex items-center gap-3">
                         <Link
                             href="/login"
-                            className="btn btn-sm md:btn-md bg-[#403F3F] hover:bg-[#2b2a2a] text-white rounded-none px-10 font-semibold"
+                            className="btn btn-sm md:btn-md bg-green-600 hover:bg-[#2b2a2a] text-white rounded px-10 font-semibold"
                         >
                             Login
                         </Link>

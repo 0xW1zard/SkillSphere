@@ -13,7 +13,7 @@ const NavLink = ({ href, children }) => {
 
     return (
         <div>
-            <Link href={href} className={` block w-full h-full ${isActive() ? 'border-b-2 border-gray-500' : ''}`}>
+            <Link href={href} className={` block w-full h-full ${isActive() ? 'border-b-2 border-green-600' : ''}`}>
                 {children}
             </Link>
         </div>
