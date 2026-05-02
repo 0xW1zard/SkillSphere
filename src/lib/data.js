@@ -8,6 +8,12 @@ export const coursesdata = async () => {
     return data;
 }
 
+export const singleCourseData = async (id) => {
+    const res = await fetch(`https://skillsphere-server-jrdz.onrender.com/courses/${id}`);
+    const data = await res.json();
+    return data;
+}
+
 export const instructors = [
     {
         id: 1,
