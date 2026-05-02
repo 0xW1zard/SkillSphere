@@ -1,13 +1,38 @@
 'use client'
 import { authClient } from '@/lib/auth-client';
+import { refresh } from 'next/cache';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { FaUserEdit, FaChartLine, FaPencilAlt } from 'react-icons/fa';
+import { useForm } from 'react-hook-form';
+import { FaChartLine, FaPencilAlt, FaUser } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const ProfileDashboard = () => {
     const { data: session, isPending } = authClient.useSession();
     const router = useRouter();
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
+
+    const onSubmit = async (data) => {
+        const { name, photo } = data;
+
+        const { data: res, error } = await authClient.updateUser({
+            name: name || session.user.name,
+            image: photo || session.user.image,
+        });
+
+        if (error) {
+            toast.error('Failed to update profile. Please try again.' + error.message);
+            return;
+        }
+
+        if (res) {
+            toast.success('Profile updated successfully!');
+            document.getElementById('my_modal_5').close();
+            
+        }
+    };
 
     useEffect(() => {
         if (!isPending && !session) {
@@ -64,47 +89,88 @@ const ProfileDashboard = () => {
                             </div>
                         </div>
 
-                        <button className="w-full mt-8 bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                        <button onClick={() => document.getElementById('my_modal_5').showModal()} className="w-full mt-8 bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
                             <FaPencilAlt className="text-xs" /> Update Profile
                         </button>
                     </div>
                 </div>
 
+                <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+                    <div className="modal-box">
+                        <h3 className="font-bold text-lg">Update Your Info</h3>
+                        <div className="modal-action">
+                            <form method="dialog" onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
+                                {/* if there is a button in form, it will close the modal */}
+                                <fieldset className="fieldset w-full ">
+                                    <legend className="fieldset-legend text-sm text-gray-700">Enter your name</legend>
+                                    <input type="text" className="input w-full" placeholder="John Doe" {...register("name")} />
+                                    {
+                                        errors.name && (
+                                            <p className='text-red-500 text-xs mt-1'>
+                                                {errors.name.message}
+                                            </p>
+                                        )
+                                    }
+                                </fieldset>
+
+                                <fieldset className="fieldset w-full ">
+                                    <legend className="fieldset-legend text-sm text-gray-700">Enter your image URL</legend>
+                                    <input type="text" className="input w-full" placeholder="https://example.com/image.jpg" {...register("photo", {
+                                        pattern: {
+                                            value: /^https?:\/\/.+/i,
+                                            message: "Please enter a valid URL starting with http:// or https://"
+                                        }
+                                    })} />
+                                    {
+                                        errors.photo && (
+                                            <p className='text-red-500 text-xs mt-1'>
+                                                {errors.photo.message}
+                                            </p>
+                                        )
+                                    }
+                                </fieldset>
+                                <button className="w-full my-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-md transition-colors">
+                                    Update Profile
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </dialog>
+
                 <div className="lg:col-span-2 space-y-8">
                     <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
                         <div className="flex items-center gap-2 mb-6 text-slate-800">
-                            <FaUserEdit className="text-emerald-600" />
-                            <h3 className="text-lg font-bold">Edit Information</h3>
+                            <FaUser className="text-emerald-600" />
+                            <h3 className="text-lg font-bold">Information</h3>
+                        </div>
+                        <div className="space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Full Name</h4>
+                                    <p className="text-lg font-medium text-slate-800">{session.user.name}</p>
+                                </div>
+
+                                <div>
+                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Email Address</h4>
+                                    <p className="text-lg font-medium text-slate-800">{session.user.email}</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Image URL</h4>
+                                <p className="text-sm text-slate-600 break-all bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    {session.user.image}
+                                </p>
+                            </div>
+
+                            <div>
+                                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Short Bio</h4>
+                                <p className="text-slate-600 leading-relaxed italic">
+                                    "Passionate learner focusing on advanced UI design systems."
+                                </p>
+                            </div>
                         </div>
 
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-xs font-medium text-slate-500 mb-2 uppercase tracking-wider">Full Name</label>
-                                    <input type="text" defaultValue={session.user.name} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" />
-                                </div>
-                                <div>
-                                    <label className="block text-xs font-medium text-slate-500 mb-2 uppercase tracking-wider">Email Address</label>
-                                    <input type="email" defaultValue={session.user.email} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-medium text-slate-500 mb-2 uppercase tracking-wider">Image URL</label>
-                                <input type="text" defaultValue={session.user.image} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all" />
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-medium text-slate-500 mb-2 uppercase tracking-wider">Short Bio</label>
-                                <textarea rows="4" defaultValue={session.user.bio || "Passionate learner focusing on advanced UI design systems."} className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none transition-all resize-none"></textarea>
-                            </div>
-
-                            <div className="flex justify-end">
-                                <button type="button" className="bg-[#00684a] hover:bg-[#00563d] text-white px-8 py-2.5 rounded-lg font-medium transition-colors">
-                                    Update Information
-                                </button>
-                            </div>
-                        </form>
                     </div>
 
                     <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
@@ -135,8 +201,8 @@ const ProfileDashboard = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 
