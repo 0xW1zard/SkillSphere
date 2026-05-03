@@ -24,6 +24,7 @@ const LoginPage = () => {
             provider: "google",
             callbackURL: "/",
         });
+        toast.info("Redirecting to Google for authentication...");
     }
 
     const onSubmit = async (data) => {

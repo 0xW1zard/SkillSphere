@@ -51,7 +51,7 @@ export default function SearchableCourses({ initialCourses }) {
                 </motion.div>
 
                 <motion.div initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                   <AnimatePresence mode="wait">
+                   <AnimatePresence mode="popLayout">
                     {filteredCourses.length > 0 ? (
                         filteredCourses.map((course) => (
                             <motion.div key={course.id} variants={cardVariants} initial="hidden" animate="visible" exit="hidden">

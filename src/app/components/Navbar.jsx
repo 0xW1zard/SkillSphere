@@ -6,17 +6,25 @@ import NavLink from './NavLink';
 import { authClient } from '@/lib/auth-client';
 import { BsArrowRight } from 'react-icons/bs';
 import { LuLogOut } from 'react-icons/lu';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
 
     const { data: session } = authClient.useSession()
-
+    const router = useRouter();
 
     const link = <>
         <li><NavLink href="/">Home</NavLink></li>
         <li><NavLink href="/courses">Courses</NavLink></li>
         <li><NavLink href="/profile">My Profile</NavLink></li>
     </>
+
+    const handleLogout = async () => {
+        toast.success("Logged out successfully!");
+        await authClient.signOut();
+        router.push("/");
+    }
 
     return (
         <div className='border-b border-green-600 sticky top-0 z-30 bg-white'>
@@ -49,8 +57,8 @@ const Navbar = () => {
                         {session ? (
                             <div className='flex items-center gap-2 md:gap-4'>
                                 <h2 className="hidden sm:block text-sm font-medium">{session.user.name}</h2>
-                                <Image src={session.user.image || "https://i.pravatar.cc/300"} alt="User Avatar" width={36} height={36} className="rounded-full border border-slate-200"/>
-                                <button onClick={async () => await authClient.signOut()} className='p-2 hover:text-red-600 transition-colors'>
+                                <Image src={session.user.image || "https://i.pravatar.cc/300"} alt="User Avatar" width={36} height={36} className="rounded-full border border-slate-200" />
+                                <button onClick={handleLogout} className='p-2 hover:text-red-600 transition-colors'>
                                     <LuLogOut size={20} />
                                 </button>
                             </div>

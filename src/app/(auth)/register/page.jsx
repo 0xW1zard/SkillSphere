@@ -24,6 +24,7 @@ const RegisterPage = () => {
             provider: "google",
             callbackURL: "/",
         });
+        toast.info("Redirecting to Google for authentication...");
     }
 
     const onSubmit = async (data) => {
@@ -49,8 +50,8 @@ const RegisterPage = () => {
 
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { 
-            opacity: 1, 
+        visible: {
+            opacity: 1,
             y: 0,
             transition: { duration: 0.5, ease: "easeOut", staggerChildren: 0.1 }
         }
@@ -63,7 +64,7 @@ const RegisterPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -108,7 +109,7 @@ const RegisterPage = () => {
                     </motion.fieldset>
 
                     {/* 3. Add hover and tap animations to the main button */}
-                    <motion.button 
+                    <motion.button
                         whileHover={{ scale: 1.01 }}
                         whileTap={{ scale: 0.98 }}
                         className="w-full my-3 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-medium rounded-md transition-colors"
@@ -120,11 +121,11 @@ const RegisterPage = () => {
                 <motion.div variants={itemVariants} className="divider">OR</motion.div>
 
                 {/* 4. Google Login micro-interaction */}
-                <motion.div 
+                <motion.div
                     variants={itemVariants}
                     whileHover={{ backgroundColor: "#f8fafc" }}
                     whileTap={{ scale: 0.98 }}
-                    onClick={handleGoogleLogin} 
+                    onClick={handleGoogleLogin}
                     className='flex justify-center items-center gap-3 border border-gray-200 rounded py-2 text-green-600 hover:text-emerald-700 transition-colors cursor-pointer'
                 >
                     <GrGoogle /> <span>Register with Google</span>
