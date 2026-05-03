@@ -47,7 +47,6 @@ const RegisterPage = () => {
         }
     }
 
-    // Animation Variants
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: { 
@@ -64,7 +63,6 @@ const RegisterPage = () => {
 
     return (
         <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-            {/* 2. Wrap the card in motion.div for an entry fade-up */}
             <motion.div 
                 variants={containerVariants}
                 initial="hidden"
