@@ -34,12 +34,6 @@ const ProfileDashboard = () => {
         }
     };
 
-    useEffect(() => {
-        if (!isPending && !session) {
-            router.push('/login');
-        }
-    }, [session, isPending, router]);
-
     if (isPending) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50">

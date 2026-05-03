@@ -12,16 +12,30 @@ const LoginPage = () => {
 
     const [isShowPassword, setIsShowPassword] = useState(false);
     const router = useRouter();
+    const { data: session } = authClient.useSession();
+
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm()
+
+    const handleGoogleLogin = async () => {
+        if (session) {
+            toast.info("You are already logged in.");
+            return;
+        }
+        await authClient.signIn.social({
+            provider: "google",
+            callbackURL: "/",
+        });
+        toast.success("Google login successful!")
+    }
 
     const onSubmit = async (data) => {
         const { name, email, password, photo } = data
         console.log("Form Data:", { name, email, password, photo })
 
         const { data: res, error } = await authClient.signIn.email({
-            email: email, // required
-            password: password, // required
+            email: email,
+            password: password,
             callbackURL: "/",
         });
 
@@ -66,7 +80,7 @@ const LoginPage = () => {
                 </form>
                 <div className="divider">OR</div>
 
-                <div className='flex justify-center items-center gap-3 border border-gray-200 rounded py-2 text-green-600 hover:text-emerald-700 transition-colors cursor-pointer'>
+                <div onClick={handleGoogleLogin} className='flex justify-center items-center gap-3 border border-gray-200 rounded py-2 text-green-600 hover:text-emerald-700 transition-colors cursor-pointer'>
                     <GrGoogle></GrGoogle> <span>Login with Google</span>
                 </div>
 

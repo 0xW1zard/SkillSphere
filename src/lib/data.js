@@ -1,5 +1,6 @@
 import { BiBarChartAlt2, BiBrain, BiPalette } from "react-icons/bi";
 import { BsCashStack } from "react-icons/bs";
+import { FaBookOpen, FaBrain, FaClock, FaLayerGroup } from "react-icons/fa";
 import { FiCloud, FiLayout, FiLock, FiSmartphone } from "react-icons/fi";
 
 export const coursesdata = async () => {
@@ -95,4 +96,32 @@ export const trendingTopics = [
         students: "4.9k New Students",
         icon: <FiSmartphone className="w-6 h-6 text-[#104A3A]" />
     },
+];
+
+
+export const techniquesData = [
+    {
+        title: "Pomodoro Technique",
+        description: "Work for 25 minutes, then take a 5-minute break. It maintains focus and prevents burnout.",
+        icon: <FaClock/>,
+        
+    },
+    {
+        title: "Active Recall",
+        description: "Test yourself instead of just reading. It strengthens neural connections and long-term memory.",
+        icon: <FaBrain/>,
+        
+    },
+    {
+        title: "Feynman Technique",
+        description: "Explain a concept to someone else (or an imaginary friend) in simple terms to find gaps in your knowledge.",
+        icon: <FaBookOpen/>,
+        
+    },
+    {
+        title: "Spaced Repetition",
+        description: "Review information at increasing intervals over time to move data into your long-term memory.",
+        icon: <FaLayerGroup/>,
+        
+    }
 ];

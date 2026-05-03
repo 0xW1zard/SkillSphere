@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Card from '@/app/components/shared/Card';
 import { FiSearch } from 'react-icons/fi';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export default function SearchableCourses({ initialCourses }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -9,6 +10,21 @@ export default function SearchableCourses({ initialCourses }) {
     const filteredCourses = initialCourses.filter((course) =>
         course.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
 
     return (
         <section className="bg-[#F8FAFC] py-16 px-4 sm:px-6 lg:px-8 font-sans">
@@ -22,7 +38,7 @@ export default function SearchableCourses({ initialCourses }) {
                     </p>
                 </div>
 
-                <div className="max-w-2xl mx-auto mb-12 relative">
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-w-2xl mx-auto mb-12 relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -32,12 +48,15 @@ export default function SearchableCourses({ initialCourses }) {
                         className="block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-lg leading-5 bg-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm shadow-sm transition-shadow"
                         placeholder="Search for courses..."
                     />
-                </div>
+                </motion.div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <motion.div initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                   <AnimatePresence mode="wait">
                     {filteredCourses.length > 0 ? (
                         filteredCourses.map((course) => (
-                            <Card key={course.id} course={course} />
+                            <motion.div key={course.id} variants={cardVariants} initial="hidden" animate="visible" exit="hidden">
+                                <Card key={course.id} course={course} />
+                            </motion.div>
                         ))
                     ) : (
                         <div className="col-span-full py-20 px-4 text-center bg-slate-100 rounded-2xl border border-slate-200 container mx-auto">
@@ -57,7 +76,8 @@ export default function SearchableCourses({ initialCourses }) {
 
                         </div>
                     )}
-                </div>
+                     </AnimatePresence>
+                </motion.div>
             </div>
         </section>
     );

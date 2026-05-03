@@ -1,10 +1,13 @@
-import { courses, coursesdata, instructors, trendingTopics } from "@/lib/data";
+import { coursesdata, instructors, techniquesData, trendingTopics } from "@/lib/data";
 import Image from "next/image";
 import Link from "next/link";
 import { IoIosTrendingUp } from "react-icons/io";
 import Card from "../components/shared/Card";
 import { BiTimer } from "react-icons/bi";
 import { FiBookOpen } from "react-icons/fi";
+import Hero from "../components/Hero";
+import Trending from "../components/Trending";
+
 
 
 
@@ -15,47 +18,12 @@ export default async function Home() {
   const popularCourses = courseData.slice(0, 3);
   const trending = trendingTopics;
   const mentors = instructors;
+  const techniques = techniquesData;
 
   return (
     <div className="bg-slate-50">
       {/* Hero section */}
-      <section className="container mx-auto px-8 py-16 md:py-24 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
-        <div className="space-y-6">
-          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-            Upgrade Your Skills Today
-          </h1>
-          <p className="text-lg text-secondary max-w-lg leading-relaxed">
-            Join thousands of professionals mastering new technologies with our industry-leading courses. Learn at your own pace from world-class instructors.
-          </p>
-          <Link href="/courses">
-            <button className="btn btn-success btn-outline p-5.5 rounded font-semibold active:scale-95 transition-all hover:text-white ">
-              Browse Courses
-            </button>
-          </Link>
-        </div>
-        <div className="relative">
-          <div className="aspect-4/3 rounded-xl overflow-hidden shadow-2xl">
-            <Image
-              className="w-full h-full object-cover"
-              alt="Students collaborating"
-              width={600}
-              height={400} loading="eager"
-              src='https://plus.unsplash.com/premium_vector-1726350510482-b9fa79c5b2f0?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-            />
-          </div>
-          <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-lg shadow-xl border border-green-200 border-outline-variant hidden lg:block">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-green-300 flex items-center justify-center">
-                <IoIosTrendingUp></IoIosTrendingUp>
-              </div>
-              <div>
-                <p className="font-bold text-sm tracking-wide">15k+ Learners</p>
-                <p className="text-xs text-secondary">Actively growing today</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section >
+      <Hero></Hero>
 
       {/* course Section */}
       <section className=" py-12 px-4 sm:px-6 lg:px-8">
@@ -92,40 +60,28 @@ export default async function Home() {
       </section>
 
       {/* Trending section */}
-      <section className="bg-sky-50 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="container mx-auto">
+      <Trending></Trending>
 
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
-              Trending Right Now
-            </h2>
-            <p className="mt-2 text-slate-500">
-              Join the conversation with these fast-growing subjects
-            </p>
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold text-slate-800">Master Your Learning</h2>
+            <p className="text-slate-500 mt-2">Scientifically proven methods to help you study more effectively.</p>
           </div>
 
-          <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 snap-x snap-mandatory hide-scrollbar">
-            {trendingTopics.map((topic) => (
-              <div
-                key={topic.id}
-                className="bg-white border border-slate-200 rounded-xl p-4 flex items-center gap-4 min-w-70 sm:min-w-75 shrink-0 snap-start hover:shadow-md transition-shadow cursor-pointer"
-              >
-                <div className="w-14 h-14 rounded-xl bg-[#EAF0F6] flex items-center justify-center shrink-0">
-                  {topic.icon}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {techniques.map((item, index) => (
+              <div key={index} className="p-6 rounded-2xl border border-slate-100 hover:shadow-md transition-shadow duration-300">
+                <div className={`w-12 h-12 text-green-600 rounded-xl flex items-center justify-center mb-4 text-xl`}>
+                  {item.icon}
                 </div>
-
-                <div className="flex flex-col">
-                  <h3 className="font-bold text-slate-900 text-[15px]">
-                    {topic.title}
-                  </h3>
-                  <p className="text-sm text-slate-500 mt-0.5">
-                    {topic.students}
-                  </p>
-                </div>
+                <h3 className="text-lg font-bold text-slate-800 mb-2">{item.title}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
@@ -225,7 +181,7 @@ export default async function Home() {
                 <div className="relative w-36 h-36 mb-6">
                   <div className="absolute inset-0 rounded-full border-2 group-hover:scale-105 transition-transform duration-300"></div>
                   <div className="absolute inset-1.5 rounded-full overflow-hidden bg-slate-200">
-                    <Image src={instructor.image} alt={instructor.name} width={200} height={200} 
+                    <Image src={instructor.image} alt={instructor.name} width={200} height={200}
                       className="object-cover"
                     />
                   </div>
